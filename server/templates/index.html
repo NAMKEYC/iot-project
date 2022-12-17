@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <h1 style="text-align: center; text-transform: uppercase; background-color: #2d8196; color: white; padding: 40px">temperature, humidity and rainfall</h1>
+    <div style="display: flex;">
+      <div style="width: 40vw; height: 50vh">
+        <canvas id="myChart"></canvas>
+      </div>
+      <div style="width: 40vw; height: 50vh;">
+        <canvas id="myChart2"> </canvas>
+      </div>
+      <div style="width: 40vw; height: 50vh">
+        <canvas id="myChart3"></canvas>
+      </div>
+    </div>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+      
+      //myChart0
+
+      const config = {
+        type: "line",
+        data:{
+          labels: ["0", "10", "20", "30", "40", "50", "60", "70", "80", "90"],
+          datasets: [
+            {
+              label: "Temperature",
+              backgroundColor: "rgb(230, 0, 0)",
+              borderColor: "rgb(230, 0, 0)",
+              data: [0, 0, 0, 0, 0, 0,0, 0, 0, 0],
+          },
+        ],
+      } ,
+        options: {},
+      };
+      var myChart = new Chart(document.getElementById("myChart"), config);
+  
+      Update()
+      setInterval(()=>{
+        Update();
+      },500)
+
+      function Update(){
+        axios.get('http://127.0.0.1:5000/data')
+        .then((response) => {
+          let index = 0;
+          res = response.data;
+          res.slice().reverse().forEach(element => {
+            // console.log(element.id)
+            myChart.data.labels[index] = element.hour;
+            myChart.data.datasets[0].data[index] = element.temp
+            console.log(index + ": " + element.temp)
+            index++;
+          });
+          myChart.update()
+        })
+        .catch(err => {
+          console.error(err)
+        })
+      }
+  
+    </script>
+    
+    
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+      
+      //myChart2
+
+      const config2 = {
+        type: "line",
+        data:{
+          labels: ["0", "10", "20", "30", "40", "50", "60", "70", "80", "90"],
+          datasets: [
+            {
+              label: "Humidity",
+              backgroundColor: "rgb(0, 200, 250)",
+              borderColor: "rgb(0, 200, 250)",
+              data: [0, 0, 0, 0, 0, 0,0, 0, 0, 0],
+          },
+        ],
+      } ,
+        options: {},
+      };
+      var myChart2 = new Chart(document.getElementById("myChart2"), config2);
+      
+      Update2()
+      setInterval(()=>{
+        Update2();
+      },500)
+
+      function Update2(){
+        axios.get('http://127.0.0.1:5000/hud')
+        .then((response) => {
+          let index = 0;
+          res = response.data;
+          res.slice().reverse().forEach(element => {
+            // console.log(element.id)
+            myChart2.data.labels[index] = element.hour;
+            myChart2.data.datasets[0].data[index] = element.hud
+            console.log(index + ": " + element.hud)
+            index++;
+          });
+          myChart2.update()
+        })
+        .catch(err => {
+          console.error(err)
+        })
+      }
+      
+    </script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+      
+      //myChart3
+    
+      const config3 = {
+        type: "line",
+        data:{
+          labels: ["0", "10", "20", "30", "40", "50", "60", "70", "80", "90"],
+          datasets: [
+            {
+              label: "Rainfall",
+              backgroundColor: "rgb(0, 100, 255)",
+              borderColor: "rgb(0, 100, 255)",
+              data: [0, 0, 0, 0, 0, 0 ,0, 0, 0, 0],
+          },
+        ],
+      } ,
+        options: {},
+      };
+      var myChart3 = new Chart(document.getElementById("myChart3"), config3);
+  
+      Update3()
+      setInterval(()=>{
+        Update3();
+      },500)
+
+      function Update3(){
+        axios.get('http://127.0.0.1:5000/rain')
+        .then((response) => {
+          let index = 0;
+          res = response.data;
+          res.slice().reverse().forEach(element => {
+            // console.log(element.id)
+            myChart3.data.labels[index] = element.hour;
+            myChart3.data.datasets[0].data[index] = element.rain
+            console.log(index + ": " + element.rain)
+            index++;
+          });
+          myChart3.update()
+        })
+        .catch(err => {
+          console.error(err)
+        })
+      }
+  
+    </script>
+    
+  </body>
+</html>
